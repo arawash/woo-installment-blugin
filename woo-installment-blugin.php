@@ -24,28 +24,33 @@ if ( ! function_exists( 'installment_warp' ) ) {
         $gitcatname= $product->get_categories();
         echo $gitcatname;
 
-        global $post;
-        $terms = wc_get_product_terms( $post->ID, 'product_cat', array( 'orderby' => 'parent', 'order' => 'DESC' ) );
-        if ( ! empty( $terms ) ) {
-            $main_term = $terms[0];
-            $ancestors = get_ancestors( $main_term->term_id, 'product_cat' );
-            if ( ! empty( $ancestors ) ) {
-                $ancestors = array_reverse( $ancestors );
-                // first element in $ancestors has the root category ID
-                // get root category object
-                $root_cat = get_term( $ancestors[0], 'product_cat' );
-            }
-            else {
-                // root category would be $main_term if no ancestors exist
-            }
-        }
-        else {
-            // no category assigned to the product
-        }
-    }
 
+        echo "  gitcatname";
+
+
+
+        /*************************************************** */
+
+
+        function get_parent_terms($term) {
+            if ($term->parent > 0){
+                $term = get_term_by("id", $term->parent, "product_cat");
+                return get_parent_terms($term);
+            }else{
+                return $term->term_id;
             }
         }
+        global $wp_query;
+        $cat_obj = $wp_query->get_queried_object();
+        $Root_Cat_ID = get_parent_terms($cat_obj);
+
+        print_r($cat_obj);
+
+        print($Root_Cat_ID);
+    
+    }
+            }
+       
 
 add_action( 'woocommerce_after_add_to_cart_button',		'installment_warp',	 	1  );
 

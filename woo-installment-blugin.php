@@ -16,7 +16,6 @@ Domain Path: /languages
 if ( ! function_exists( 'installment_warp' ) ) {           
     function installment_warp() {
         global $product;
-        global $post;
        
         $response = wp_remote_get( plugin_dir_url( __FILE__ ).'/a.json' );
         $resBody = wp_remote_retrieve_body( $response );
@@ -24,33 +23,16 @@ if ( ! function_exists( 'installment_warp' ) ) {
         $gitcatname= $product->get_categories();
         echo $gitcatname;
 
+        /* $pr = $product;
+        echo $pr;
+ */
+       
+        $a =    the_widget( 'Woothemes_Widget_Project_Categories', 'title=&hierarchical=0&count=1' );
+        echo $a;
+       
 
-        echo "  gitcatname";
-
-
-
-        /*************************************************** */
-
-
-        function get_parent_terms($term) {
-            if ($term->parent > 0){
-                $term = get_term_by("id", $term->parent, "product_cat");
-                return get_parent_terms($term);
-            }else{
-                return $term->term_id;
             }
         }
-        global $wp_query;
-        $cat_obj = $wp_query->get_queried_object();
-        $Root_Cat_ID = get_parent_terms($cat_obj);
-
-        print_r($cat_obj);
-
-        print($Root_Cat_ID);
-    
-    }
-            }
-       
 
 add_action( 'woocommerce_after_add_to_cart_button',		'installment_warp',	 	1  );
 

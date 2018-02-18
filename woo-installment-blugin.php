@@ -16,6 +16,7 @@ Domain Path: /languages
 if ( ! function_exists( 'installment_warp' ) ) {           
     function installment_warp() {
         global $product;
+        global $post;
        
         $response = wp_remote_get( plugin_dir_url( __FILE__ ).'/a.json' );
         $resBody = wp_remote_retrieve_body( $response );
@@ -24,209 +25,25 @@ if ( ! function_exists( 'installment_warp' ) ) {
         echo $gitcatname;
 
         global $post;
-        $prod_terms = get_the_terms( $post->ID, 'product_cat' );
-        foreach ($prod_terms as $prod_term) {
-        
-            // gets product cat id
-            $product_cat_id = $prod_term->term_id;
-        
-            // gets an array of all parent category levels
-            $product_parent_categories_all_hierachy = get_ancestors( $product_cat_id, 'product_cat' );  
-        
-        
-        
-            // This cuts the array and extracts the last set in the array
-            $last_parent_cat = array_slice($product_parent_categories_all_hierachy, -1, 1, true);
-            foreach($last_parent_cat as $last_parent_cat_value){
-                // $last_parent_cat_value is the id of the most top level category, can be use whichever one like
-                echo '<strong>' . $last_parent_cat_value . '</strong>';
+        $terms = wc_get_product_terms( $post->ID, 'product_cat', array( 'orderby' => 'parent', 'order' => 'DESC' ) );
+        if ( ! empty( $terms ) ) {
+            $main_term = $terms[0];
+            $ancestors = get_ancestors( $main_term->term_id, 'product_cat' );
+            if ( ! empty( $ancestors ) ) {
+                $ancestors = array_reverse( $ancestors );
+                // first element in $ancestors has the root category ID
+                // get root category object
+                $root_cat = get_term( $ancestors[0], 'product_cat' );
             }
-        
+            else {
+                // root category would be $main_term if no ancestors exist
+            }
         }
-        ?>
-<!-- 
-    <button type="button" name="add-to-cart" value="<?php echo esc_attr( $product->id ); ?>" id="instalment" class="single_add_to_cart_button button alt instalment"
-        onclick="document.getElementById('installment_table').style.visibility='visible'">
-        <?php echo 'Installment';?>>
-    </button>
+        else {
+            // no category assigned to the product
+        }
+    }
 
-    <div id="installment_table" class="alert alert-success">
-        <br>
-        <strong>
-            <?php print('Installment Bar')?>
-        </strong>
-        <?php print('Installment is OK')?>.
-        <?php  
-        global $product;
-       ?>
-        <p class="price">
-            <?php echo $product->get_price_html(); ?>
-        </p>
-        <?php
-        echo $product->price ;
-        ?>
-             <div ng-app="installment">
-                <div ng-controller="ctrl">
-
-                    <div class="input-group input-group-lg">
-                        <!--<span class="input-group-addon" id="sizing-addon1">@</span>-->
-                        <p>Input something in the input box:</p>
-                        <input type="text" ng-model="inAdvance" class="form-control" placeholder="المقدم" aria-describedby="sizing-addon1">
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="true">
-                            اختار مدة القسط
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            <li ng-repeat="dur in body.durs">
-                                <a ng-click="do($index)" href="">{{dur.monthes}} monthes</a>
-                            </li>
-                            <!--<li role="separator" class="divider"></li>-->
-                            <!--<li><a href="#">Separated link</a></li>-->
-                        </ul>
-                    </div>
-                    
-                    <!--<p>Name: <input type="text"></p>-->
-                    <p>the rest price : {{body.restprice}}</p>
-                    <p>interest : {{body.interest}}</p>
-                    <p>each month : {{body.eachMonth}}</p>
-
-
-                    <div class="alert alert-warning" ng-show="showAlert">
-                        <strong>تحزير!</strong> برجاء ادخال مبلغ اكبر من او يساوى 20% من المبلغ الاصلى.
-                    </div>
-
-                </div>
-<script>
-angular.module("installment", []).controller('ctrl', function ($scope) {
-
-console.log(<?php echo json_encode($resBody) ?>);
-$scope.price = parseInt(<?php echo json_encode($product->price) ?>);
-$scope.body = JSON.parse(<?php echo json_encode($resBody) ?>);
-
-/*{
-
-/*  equated monthly installment (EMI)  
-A fixed payment amount made by a borrower to a lender at a specified date each calendar month.
-
-where:  P is the principal amount borrowed, 
-A is the periodic amortization payment, 
-r is the periodic interest rate divided by 100 (annual interest rate also divided by 12 in case of monthly installments), 
-and n is the total number of payments
-P هو المبلغ الرئيسي المقترض،
-                    A هو دفع الإطفاء الدوري،
-                    r هو سعر الفائدة الدوري مقسوما على 100 (سعر الفائدة السنوي مقسوما أيضا على 12 في حالة الأقساط الشهرية)
-                    n هو إجمالي عدد المدفوعات ال شهرية
-For example,
-if you borrow 10,000,000 units of a currency from the bank at 10.5% annual interest for a period of 10 years (i.e., 120 months), 
-then EMI = Units of currency 10,000,000 * 0.00875 * (1 + 0.00875)^120 / ((1 + 0.00875)^120 – 1) = Units of currency 134,935. i.e., 
-you will have to pay total currency units 134,935 for 120 months to repay the entire loan amount. 
-The total amount payable will be 134,935 * 120 = 16,192,200 currency units that includes currency units 6,192,200 as interest toward the loan.
-*/
-// the formula...
-//EMI = p * r * (1 + r)^n / ((1 + r)^n – 1) = Units of currency 
-// المعلومات المتوفرة
-//السعر الكامل 
-//P باقى المبلغ (المقسط)
-//r هو سعر الفائدة الدوري مقسوما على 100  ثم على 12 باشهر 
-//n هو إجمالي عدد المدفوعات ال شهرية
-// المعلومة المطلوبة
-//A مبلغ القسط
-
-// تعديل المعادلة لتصبح قابلة للحساب بالكمبيوتر و تقسيم عمليلا الحساب
-//EMI = p * (r * (1 + r)^n / ((1 + r)^n – 1)) = Units of currency 
-// تقسيم العملية و اضافة ال  JavaScript Math Opject
-
-//EMI A = p * ((r * (Math.pow(1 + r, n)) / ((Math.pow(1 + r, n) – 1))) = Units of currency 
-//تسمية المتغيرات
-
-
-///////////////////////////////////////////////////////////////////////////////
-//A = p * ((r * (Math.pow(1 + r, n)) / ((Math.pow(1 + r, n) – 1))) = Units of currency
-//A = periodicAmortizationPayment
-//p = principalAmountBorrowed
-//r = periodicInterestRateDivided
-//n = totalNumberOfPayments
-//periodicAmortizationPayment = principalAmountBorrowed * ((periodicInterestRateDivided * (Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments)) / ((Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments) – 1))) = Units of currency
-////////////////////////////////////////////////////////////////////////////////
-
-//loanNetCost = (principal) + (loanTotalInterest);
-//alert('You will owe this much money: + loanNetCost');
-
-
-
-//استخلاص دفعة الاستهلاك الدورية 
-
-var principalAmountBorrowed = $scope.principalAmountBorrowed;
-var periodicInterestRateDivided = $scope.periodicInterestRateDivided;
-var totalNumberOfPayments = $scope.totalNumberOfPayments;
-$scope.periodicAmortizationPayment = () => {
-
-    principalAmountBorrowed * ((periodicInterestRateDivided * (Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments)) / ((Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments) - 1))));
-    
-};
-console.log($scope);
-$scope.do = (idx) => {
-    
-
-// استخلاص نسبة ال فائدة
-$scope.rate =  $scope.body.categs[0].installmentDuration[0]
-
-//استخلاص نسبة المؤخر سدادة
-$scope.p = $scope.price - $scope.inAdvance;
- 
-//استخلاص نسبة الفائدة على كل شهر 
-$scope.r = ($scope.rate / 100) / 12;
-
-
-//$scope.totalNumberOfPayments = $scope.inAdvance;
-
-//استخلاص شهور الدفع
-$scope.n = $scope.body.durs[0].monthes;
-    
-///////////////////////////////////////////////////////////////////////////////
-//A = p * ((r * (Math.pow(1 + r, n)) / ((Math.pow(1 + r, n) – 1))) = Units of currency
-//A = periodicAmortizationPayment
-//p = principalAmountBorrowed
-//r = periodicInterestRateDivided
-//n = totalNumberOfPayments
-//periodicAmortizationPayment = principalAmountBorrowed * ((periodicInterestRateDivided * (Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments)) / ((Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments) – 1))) = Units of currency
-////////////////////////////////////////////////////////////////////////////////
-    $scope.A =  $scope.p * (( $scope.r * (Math.pow(1 +  $scope.r,  $scope.n)) / ((Math.pow(1 +  $scope.r,  $scope.n) - 1))));   
-
-   console.log(idx);
-   
-    if ($scope.inAdvance > 0.2 * $scope.price && $scope.inAdvance < $scope.price) {
-    $scope.showAlert = false;
-    $scope.body.restprice = $scope.p    
-    $scope.body.interest = $scope.rate
-    $scope.body.eachMonth = $scope.A
-    console.log("do or RUN Function");
-    
-} else {
-    $scope.showAlert = true;
-    console.log($scope);
-    console.log("dd");
-    
-}   
-}
-
-console.log($scope);
-});
-</script>
-            </div>
-
-
-    </div>
-    </div>
-    <!-- /.single-product-installment-wrapper -->
-    <script>
-        document.getElementById('installment_table').style.visibility = 'hiddin'
-    </script>
-     -->
-    <?php
             }
         }
 

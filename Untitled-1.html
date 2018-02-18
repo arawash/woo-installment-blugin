@@ -1,0 +1,181 @@
+<div id="installment_table" class="alert alert-success">
+        <br>
+        <strong>
+            Installment Bar        </strong>
+        Installment is OK.
+                <p class="price">
+            <span class="electro-price"><span class="woocommerce-Price-amount amount"><span class="woocommerce-Price-currencySymbol">ج.م</span>90.00</span></span>        </p>
+        90             <div ng-app="installment">
+                <div ng-controller="ctrl">
+
+                    <div class="input-group input-group-lg">
+                        <!--<span class="input-group-addon" id="sizing-addon1">@</span>-->
+                        <p>Input something in the input box:</p>
+                        <input type="text" ng-model="inAdvance" class="form-control" placeholder="المقدم" aria-describedby="sizing-addon1">
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="true">
+                            اختار مدة القسط
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <li ng-repeat="dur in body.durs">
+                                <a ng-click="do($index)" href="">{{dur.monthes}} monthes</a>
+                            </li>
+                            <!--<li role="separator" class="divider"></li>-->
+                            <!--<li><a href="#">Separated link</a></li>-->
+                        </ul>
+                    </div>
+                    
+                    <!--<p>Name: <input type="text"></p>-->
+                    <p>the rest price : {{body.restprice}}</p>
+                    <p>interest : {{body.interest}}</p>
+                    <p>each month : {{body.eachMonth}}</p>
+
+
+                    <div class="alert alert-warning" ng-show="showAlert">
+                        <strong>تحزير!</strong> برجاء ادخال مبلغ اكبر من او يساوى 20% من المبلغ الاصلى.
+                    </div>
+
+                </div>
+<script>
+angular.module("installment", []).controller('ctrl', function ($scope) {
+
+console.log("{\r\n\t\"per\": 0,\r\n\t\"achMonth\": 0,\r\n\t\"interest\": 0,\r\n\t\"restAmount\": 0,\r\n\t\r\n\t\"durs\": [{\r\n\t\t\"monthes\": 6\r\n\t}, {\r\n\t\t\"monthes\": 12\r\n\t}, {\r\n\t\t\"monthes\": 18\r\n\t}, {\r\n\t\t\"monthes\": 24\r\n\t}],\r\n\t\"categs\": [{\r\n\t\t\"type\": \"air caonditaner\",\r\n\t\t\"installmentDuration\": [0.15, 0.30, 0.48, 0.55]\r\n\t}, {\r\n\t\t\"type\": \"phones\",\r\n\t\t\"installmentDuration\": [0.15, 0.30, 0.48, 0.55]\r\n\t},{\r\n\t\t\"type\": \"home\",\r\n\t\t\"installmentDuration\": [0.15, 0.30, 0.48, 0.55]\r\n\t}]\r\n\t\r\n\r\n}");
+var price = parseInt("90");
+$scope.body = JSON.parse("{\r\n\t\"per\": 0,\r\n\t\"achMonth\": 0,\r\n\t\"interest\": 0,\r\n\t\"restAmount\": 0,\r\n\t\r\n\t\"durs\": [{\r\n\t\t\"monthes\": 6\r\n\t}, {\r\n\t\t\"monthes\": 12\r\n\t}, {\r\n\t\t\"monthes\": 18\r\n\t}, {\r\n\t\t\"monthes\": 24\r\n\t}],\r\n\t\"categs\": [{\r\n\t\t\"type\": \"air caonditaner\",\r\n\t\t\"installmentDuration\": [0.15, 0.30, 0.48, 0.55]\r\n\t}, {\r\n\t\t\"type\": \"phones\",\r\n\t\t\"installmentDuration\": [0.15, 0.30, 0.48, 0.55]\r\n\t},{\r\n\t\t\"type\": \"home\",\r\n\t\t\"installmentDuration\": [0.15, 0.30, 0.48, 0.55]\r\n\t}]\r\n\t\r\n\r\n}");
+
+/*{
+
+/*  equated monthly installment (EMI)  
+A fixed payment amount made by a borrower to a lender at a specified date each calendar month.
+
+where:  P is the principal amount borrowed, 
+A is the periodic amortization payment, 
+r is the periodic interest rate divided by 100 (annual interest rate also divided by 12 in case of monthly installments), 
+and n is the total number of payments
+P هو المبلغ الرئيسي المقترض،
+                    A هو دفع الإطفاء الدوري،
+                    r هو سعر الفائدة الدوري مقسوما على 100 (سعر الفائدة السنوي مقسوما أيضا على 12 في حالة الأقساط الشهرية)
+                    n هو إجمالي عدد المدفوعات ال شهرية
+For example,
+if you borrow 10,000,000 units of a currency from the bank at 10.5% annual interest for a period of 10 years (i.e., 120 months), 
+then EMI = Units of currency 10,000,000 * 0.00875 * (1 + 0.00875)^120 / ((1 + 0.00875)^120 – 1) = Units of currency 134,935. i.e., 
+you will have to pay total currency units 134,935 for 120 months to repay the entire loan amount. 
+The total amount payable will be 134,935 * 120 = 16,192,200 currency units that includes currency units 6,192,200 as interest toward the loan.
+*/
+// the formula...
+//EMI = p * r * (1 + r)^n / ((1 + r)^n – 1) = Units of currency 
+// المعلومات المتوفرة
+//السعر الكامل 
+//P باقى المبلغ (المقسط)
+//r هو سعر الفائدة الدوري مقسوما على 100  ثم على 12 باشهر 
+//n هو إجمالي عدد المدفوعات ال شهرية
+// المعلومة المطلوبة
+//A مبلغ القسط
+
+// تعديل المعادلة لتصبح قابلة للحساب بالكمبيوتر و تقسيم عمليلا الحساب
+//EMI = p * (r * (1 + r)^n / ((1 + r)^n – 1)) = Units of currency 
+// تقسيم العملية و اضافة ال  JavaScript Math Opject
+
+//EMI A = p * ((r * (Math.pow(1 + r, n)) / ((Math.pow(1 + r, n) – 1))) = Units of currency 
+//تسمية المتغيرات
+
+
+///////////////////////////////////////////////////////////////////////////////
+//A = p * ((r * (Math.pow(1 + r, n)) / ((Math.pow(1 + r, n) – 1))) = Units of currency
+//A = periodicAmortizationPayment
+//p = principalAmountBorrowed
+//r = periodicInterestRateDivided
+//n = totalNumberOfPayments
+//periodicAmortizationPayment = principalAmountBorrowed * ((periodicInterestRateDivided * (Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments)) / ((Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments) – 1))) = Units of currency
+////////////////////////////////////////////////////////////////////////////////
+
+//loanNetCost = (principal) + (loanTotalInterest);
+//alert('You will owe this much money: + loanNetCost');
+
+
+
+
+// استخلاص نسبة ال فائدة
+$scope.rate = (idx) => {
+    $scope.body.categs[0].installmentDuration[idx]
+}
+//استخلاص نسبة المؤخر سدادة
+$scope.principalAmountBorrowed = (price) => {
+    price - $scope.inAdvance;
+    consol.log(price);
+}
+//استخلاص نسبة الفائدة على كل شهر 
+$scope.periodicInterestRateDivided = (rate) => {
+    (rate / 100) / 12;
+}
+
+//$scope.totalNumberOfPayments = $scope.inAdvance;
+
+//استخلاص شهور الدفع
+$scope.totalNumberOfPayments = (idx) => $scope.durs[idx].monthes;
+//استخلاص دفعة الاستهلاك الدورية 
+
+$scope.periodicAmortizationPayment = () => {
+    principalAmountBorrowed = $scope.principalAmountBorrowed;
+    periodicInterestRateDivided = $scope.periodicInterestRateDivided;
+    totalNumberOfPayments = $scope.totalNumberOfPayments;
+
+    var p = principalAmountBorrowed * ((periodicInterestRateDivided * (Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments)) / ((Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments) - 1))));
+    return p;
+};
+console.log($scope);
+$scope.do = () => {
+    if ($scope.inAdvance > 0.2 * price && $scope.inAdvance < price) {
+    $scope.showAlert = false;
+    $scope.body.restprice = $scope.principalAmountBorrowed;
+    $scope.body.interest = $scope.rate;
+    $scope.body.eachMonth = $scope.periodicAmortizationPayment();
+    console.log("do or RUN Function");
+} else {
+    $scope.showAlert = true;
+    console.log($scope);
+    console.log("dd");
+    
+}   
+}
+
+console.log($scope);
+});
+</script>
+            </div>
+
+
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    /* // تحضير الداتا
+    global $installmentRowData;
+    function gitData(){
+        $response = wp_remote_get( plugin_dir_url( __FILE__ ).'/a.json' );
+        $body = wp_remote_retrieve_body( $response );
+        $installmentRowData = json_encode( $body );
+        
+    };
+    gitData(); */
+?>
+<!--  <script type="text/javascript">
+         // pass PHP variable declared above to JavaScript variable
+         var price = <?php echo json_encode($product->price) ?>;
+         var body = <?php echo json_encode($resBody) ?>;
+     </script> -->

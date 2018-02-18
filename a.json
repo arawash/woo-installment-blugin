@@ -1,0 +1,32 @@
+{
+	"per": 0,
+	"achMonth": 0,
+	"interest": 0,
+	"restAmount": 0,
+	"rate":0,
+	"A":0,
+	"p":0,
+	"r":0,
+	"n":0,
+	"durs": [{
+		"monthes": 6
+	}, {
+		"monthes": 12
+	}, {
+		"monthes": 18
+	}, {
+		"monthes": 24
+	}],
+	"categs": [{
+		"type": "air caonditaner",
+		"installmentDuration": [0.15, 0.30, 0.48, 0.55]
+	}, {
+		"type": "phones",
+		"installmentDuration": [0.15, 0.30, 0.48, 0.55]
+	},{
+		"type": "home",
+		"installmentDuration": [0.15, 0.30, 0.48, 0.55]
+	}]
+	
+
+}

@@ -23,9 +23,28 @@ if ( ! function_exists( 'installment_warp' ) ) {
         $gitcatname= $product->get_categories();
         echo $gitcatname;
 
-    
+        global $post;
+        $prod_terms = get_the_terms( $post->ID, 'product_cat' );
+        foreach ($prod_terms as $prod_term) {
+        
+            // gets product cat id
+            $product_cat_id = $prod_term->term_id;
+        
+            // gets an array of all parent category levels
+            $product_parent_categories_all_hierachy = get_ancestors( $product_cat_id, 'product_cat' );  
+        
+        
+        
+            // This cuts the array and extracts the last set in the array
+            $last_parent_cat = array_slice($product_parent_categories_all_hierachy, -1, 1, true);
+            foreach($last_parent_cat as $last_parent_cat_value){
+                // $last_parent_cat_value is the id of the most top level category, can be use whichever one like
+                echo '<strong>' . $last_parent_cat_value . '</strong>';
+            }
+        
+        }
         ?>
-
+<!-- 
     <button type="button" name="add-to-cart" value="<?php echo esc_attr( $product->id ); ?>" id="instalment" class="single_add_to_cart_button button alt instalment"
         onclick="document.getElementById('installment_table').style.visibility='visible'">
         <?php echo 'Installment';?>>
@@ -206,134 +225,10 @@ console.log($scope);
     <script>
         document.getElementById('installment_table').style.visibility = 'hiddin'
     </script>
+     -->
     <?php
             }
         }
 
 add_action( 'woocommerce_after_add_to_cart_button',		'installment_warp',	 	1  );
 
-
-
-
-
-
-
-
-function wporg_options_page()
-{
-    add_menu_page(
-        'Installment Rawash Plugin',
-        'installment Options',
-        'manage_options',
-        'installment',
-        'wporg_options_page_html',
-        plugin_dir_url(__FILE__) . 'images/icon_wporg.png',
-        20
-    );
-}
-add_action('admin_menu', 'wporg_options_page');
-
-
-function wporg_options_page_html()
-{
-    // check user capabilities
-    if (!current_user_can('manage_options')) {
-        return;
-    }
-    ?>
-    <div class="wrap">
-        <h1><?= esc_html(get_admin_page_title()); ?></h1>
-            <?php
-            
-            echo "Instalment Option Page ";
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-?>
-<body ng-app="installment">
-
-    <div ng-controller="ctrl">
-
-        <div class="col-md-3 col-xs-6" ng-repeat="categ in categs">
-            <h2>{{categ.type}}</h2>
-            <div class="row" ng-repeat="dur in durs">
-                <div class="col-xs-12 input-group input-group-lg">
-                    <span class="input-group-addon" id="sizing-addon1">{{dur.monthes}} monthes </span>
-                    <input type="text" ng-model="categ.installmentDuration[$index]" class="form-control" placeholder="">
-                </div>
-            </div>
-
-        </div>
-
-        <button class="btn btn-default dropdown-toggle" ng-click="print()" type="button" id="dropdownMenu1" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="true">
-
-            <div class="alert alert-warning" ng-show="showAlert">
-                <strong>تحزير!</strong> برجاء ادخال مبلغ اكبر من او يساوى 20% من المبلغ الاصلى.
-            </div>
-
-    </div>
-    <script>
-        angular.module('installment', [])
-            .controller('ctrl', function ($scope) {
-                $scope.per = 0;
-                $scope.eachMonth = 0
-                $scope.interest = 0
-                $scope.restAmount = 0
-                $scope.showAlert = false;
-                ///////////////////////////////////////////////////////////
-                $scope.durs = [{
-                    monthes: 6,
-                }, {
-                    monthes: 12,
-                }, {
-                    monthes: 24,
-                }]
-
-                $scope.categs = [{
-                        type: "air caonditaner",
-                        installmentDuration: [0.25, 0.35]
-                    },
-                    {
-                        type: "phones",
-                        installmentDuration: [0.25, 0.35]
-                    }
-                ]
-
-                //////////////////////////////////////////////////////////////////////////////////////////////////
-                $scope.print = () => {
-                    console.log($scope.categs)
-                }
-
-                $scope.getper = (idx) => {
-                    $scope.per = $scope.categs[0].installmentDuration[idx]
-                    $scope.monthes = $scope.durs[idx].monthes
-                    let amount = 5000;
-                    if ($scope.inAdvance > 0.2 * amount && $scope.inAdvance < amount) {
-                        $scope.showAlert = false;
-
-                        $scope.restAmount = amount - $scope.inAdvance
-                        $scope.interest = $scope.restAmount * $scope.per
-                        $scope.eachMonth = ($scope.restAmount + $scope.interest) / $scope.monthes
-                    } else {
-                        $scope.showAlert = true;
-                    }
-                }
-
-            });
-    </script>installmentrate
-</body>
-
-
-<?php
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // output save settings button
-            submit_button('Save Settings');
-            ?>
-        </form>
-    </div>
-    <?php
-}
-
-
-/* function wporg_options_page_html()
-{
- */    // check user capabilities*/

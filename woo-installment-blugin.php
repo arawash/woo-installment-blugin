@@ -22,17 +22,18 @@ if ( ! function_exists( 'installment_warp' ) ) {
        
         $gitcatname= $product->get_categories();
         echo $gitcatname;
+      
 
-        /* $pr = $product;
-        echo $pr;
- */
-       
-        $a =    the_widget( 'Woothemes_Widget_Project_Categories', 'title=&hierarchical=0&count=1' );
-        echo $a;
-       
+        
 
-            }
-        }
+// gets product cat id
+$product_cat_id = $prod_term->term_id;
+
+// gets an array of all parent category levels
+$product_parent_categories_all_hierachy = get_ancestors( $product_cat_id, 'product_cat' ); 
+
+print_r( $product_parent_categories_all_hierachy);
+
+    }};
 
 add_action( 'woocommerce_after_add_to_cart_button',		'installment_warp',	 	1  );
-

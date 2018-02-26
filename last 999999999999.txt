@@ -1,0 +1,31 @@
+ 
+                    $scope.per = 0;
+                    $scope.achMonth = 0;
+                    $scope.interest = 0;
+                    $scope.restAmount = 0;
+                    $scope.Monthly_payment=0;
+                    $scope.inAdvance = 0;
+                    // استخلاص نسبة ال فائدة
+                    sss();
+                    //استخلاص دفعة الاستهلاك الدورية 
+                    let principalAmountBorrowed = $scope.principalAmountBorrowed;
+                    let periodicInterestRateDivided = $scope.periodicInterestRateDivided;
+                    let totalNumberOfPayments = $scope.totalNumberOfPayments;
+                    })
+
+function sss() {
+    rate = () => {
+        $scope.body.categs["three"].installmentDuration[$index];
+    };
+    //استخلاص نسبة المؤخر سدادة
+    principalAmountBorrowed = () => {
+        $scope.price - $scope.inAdvance;
+    };
+    //استخلاص نسبة الفائدة على كل شهر 
+    periodicInterestRateDivided = () => {
+        ($scope.rate / 100) / 12;
+    };
+    //$scope.totalNumberOfPayments = $scope.inAdvance;
+    //استخلاص شهور الدفع
+    $scope.totalNumberOfPayments = ($index) => $scope.durs[$index].monthes;
+}

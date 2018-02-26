@@ -9,3 +9,10 @@
                 loanNetCost = (principal) + (loanTotalInterest);
 
                 alert('You will owe this much money: + loanNetCost');
+
+
+
+/*
+Price   The Rest amount 
+                
+Duration   Rate    Installment

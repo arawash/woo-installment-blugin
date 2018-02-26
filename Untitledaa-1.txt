@@ -1,0 +1,28 @@
+angular.module("installment", []).controller('ctrl', function ($scope) {
+    $scope.price = parseInt(<?php echo json_encode($product->price) ?>);
+    $scope.body = JSON.parse(<?php echo json_encode($resBody) ?>);
+    $scope.body.xyz = "<?php $postmetacat = get_post_meta($post->ID, '_select', true);
+    echo $postmetacat; ?> ";
+    $scope.inAdvance = 0;
+    $scope.Monthly_payment = ($index) => {
+        var totalNumberOfPayments = ($index) => {
+            return $scope.body.durs[$index].monthes;
+        }
+        var rate = ($index) => {
+            let x = body.categs[$scope.body.xyz].installmentDuration[$index];
+            return x;
+        }
+        //استخلاص نسبة المؤخر سدادة
+        var principalAmountBorrowed = () => {
+            return $scope.price - $scope.inAdvance;
+        }
+        //استخلاص نسبة الفائدة على كل شهر
+        var periodicInterestRateDivided = (rate) => {
+            return (rate / 100) / 12;
+        }
+
+        //استخلاص شهور الد○فع
+        return principalAmountBorrowed * ((periodicInterestRateDivided * (Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments)) / ((Math.pow(1 + periodicInterestRateDivided), totalNumberOfPayments) - 1)));
+    }
+}
+)

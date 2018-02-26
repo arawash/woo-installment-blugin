@@ -1,0 +1,46 @@
+
+            /* 
+// استخلاص نسبة ال فائدة
+$scope.rate = (idx) => {
+    $scope.body.categs[body.xyz].installmentDuration[idx]
+}
+//استخلاص نسبة المؤخر سدادة
+$scope.principalAmountBorrowed = principalAmountBorrowed() => 
+    $scope.price - $scope.inAdvance;
+ 
+
+//استخلاص نسبة الفائدة على كل شهر 
+$scope.periodicInterestRateDivided = periodicInterestRateDivided() => {
+    ($scope.rate / 100) / 12;
+}
+
+//$scope.totalNumberOfPayments = $scope.inAdvance;
+
+//استخلاص شهور الدفع
+$scope.totalNumberOfPayments = totalNumberOfPayments(idx) => $scope.durs[idx].monthes;
+//استخلاص دفعة الاستهلاك الدورية 
+
+var principalAmountBorrowed = $scope.principalAmountBorrowed;
+var periodicInterestRateDivided = $scope.periodicInterestRateDivided;
+var totalNumberOfPayments = $scope.totalNumberOfPayments;
+$scope.periodicAmortizationPayment = () => {
+
+    principalAmountBorrowed * ((periodicInterestRateDivided * (Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments)) / ((Math.pow((1 + periodicInterestRateDivided), totalNumberOfPayments) - 1))));
+    
+};
+
+ //Return Monthly_payment})();                                     
+   
+cat = int id of parent
+dataPath = {}
+price = price;
+
+InitialldDatassss = value;
+
+getObjectFromDataOpjectByCatID = find cat(id, datapath)
+\\\\\\\\\\\\\\\\\
+VIEW
+\\\\\\\\\\\\\\\\\
+function Monthly_payment(idx) {
+return principalAmountBorrowed() ((rate (Math.pow((1 + rate*100/12), totalNumberOfPayments())) / ((Math.pow((1 + periodicInterestRateDivided()), totalNumberOfPayments()) - 1))));
+}; //Return Monthly_payment})();*/ 

@@ -250,6 +250,7 @@ function wporg_options_page_html()
             </div>
             </div>
     </div>
+    
     <script>
         angular.module('installment2', [])
             .controller('ctrl2', function ($scope) {

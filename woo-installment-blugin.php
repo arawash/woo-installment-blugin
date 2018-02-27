@@ -53,9 +53,9 @@ woocommerce_wp_select(
             'description' => __('Choose the installment type for the product.', 'woocommerce'),
             'value' => get_post_meta($value, '_select', true),
             'options' => array(
-                'one' => __('Appliances', 'woocommerce'),
-                'two' => __('AIR-CONDITIONING', 'woocommerce'),
-                'three' => __('Mobile', 'woocommerce'),
+                'one' => __('AIR-CONDITIONING', 'woocommerce'),
+                'two' => __('phones', 'woocommerce'),
+                'three' => __('home', 'woocommerce'),
             ),
         )
     );
@@ -201,6 +201,13 @@ add_action('admin_menu', 'wporg_options_page');
 add_action('init', 'load');
 function load(){
     wp_enqueue_script( 'angularjs', plugin_dir_url( __FILE__ ) . '/angular.min.js', array ( 'jquery' ), all, false);
+    wp_enqueue_script( 'angularjs', plugin_dir_url( __FILE__ ) . '/angular.min.js', array ( 'jquery' ), all, false);
+    wp_enqueue_style( 'bootstrap', plugin_dir_url( __FILE__ ) . '/bootstrap.min.css');
+    
+    
+    
+
+
 }
 
 function wporg_options_page_html()
@@ -222,15 +229,15 @@ function wporg_options_page_html()
 <body ng-app="installment2">
 
     <div ng-controller="ctrl2">
-
+    <div class="container">
+    <div class="row" >
         <div class="col-md-3 col-xs-6" ng-repeat="categ in body1.categs">
+    <h4>{{categ.type}}</h4>
              <h2>{{body.categ.one.type}}</h2> 
              <div class="row" ng-repeat="dur in body1.durs">
-                <div class="col-xs-12 input-group input-group-lg">
+                <div class="col-xs-6 input-group input-group-lg">
                     <span class="input-group-addon" id="sizing-addon1">{{body1.durs[$index].monthes}} monthes </span>
-                 <input type="text" ng-model="body1.categs.one.installmentDuration[$index]" class="form-control" placeholder="1">
-                 
-                                  
+                 <input type="text" ng-model="categ.installmentDuration[$index]" class="form-control" placeholder="">               
                 </div>
             </div> 
         </div>
@@ -241,7 +248,7 @@ function wporg_options_page_html()
             <div class="alert alert-warning" ng-show="showAlert">
                 <strong>تحزير!</strong> برجاء ادخال مبلغ اكبر من او يساوى 20% من المبلغ الاصلى.
             </div>
-
+            </div>
     </div>
     <script>
         angular.module('installment2', [])
@@ -252,9 +259,7 @@ function wporg_options_page_html()
                 $scope.print = () => {
                     console.log($scope.categs)
                 }
-                    angular.array.forEach(element => {
-                        
-                    });
+                  
                 $scope.getper = (idx) => {
                     $scope.per = $scope.categs[0].installmentDuration[idx]
                     $scope.monthes = $scope.durs[idx].monthes

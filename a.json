@@ -15,11 +15,11 @@
 		},
 		"two": {
 			"type": "phones",
-			"installmentDuration": [0.15, 0.30, 0.48, 0.55]
+			"installmentDuration": [0.15, 0.30, 0.48, 1.55]
 		},
 		"three": {
 			"type": "home",
-			"installmentDuration": [0.15, 0.30, 0.48, 0.55]
+			"installmentDuration": [0.15, 0.30, 0.48, 3.55]
 		}
 	}
 }

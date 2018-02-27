@@ -99,3 +99,10 @@ add_action( 'woocommerce_product_write_panel_tabs', 'add_product_installment_pan
 	/* function get_installment( $product ) {
 		return apply_filters( 'woocommerce_product_installment_ids', (array) maybe_unserialize( $product->installment_ids ), $product );
 	} */
+
+
+
+
+	  angular.array.forEach(element => {
+                        
+                    });

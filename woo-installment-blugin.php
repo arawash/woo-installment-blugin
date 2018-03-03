@@ -200,8 +200,7 @@ add_action('admin_menu', 'wporg_options_page');
 
 add_action('init', 'load');
 function load(){
-    wp_enqueue_script( 'angularjs', plugin_dir_url( __FILE__ ) . '/angular.min.js', array ( 'jquery' ), all, false);
-    wp_enqueue_script( 'angularjs', plugin_dir_url( __FILE__ ) . '/angular.min.js', array ( 'jquery' ), all, false);
+    wp_enqueue_script( 'angularjs', plugin_dir_url( __FILE__ ) . '/angular.js', array ( 'jquery' ), all, false);
     wp_enqueue_style( 'bootstrap', plugin_dir_url( __FILE__ ) . '/bootstrap.min.css');
     
     
@@ -230,38 +229,80 @@ function wporg_options_page_html()
 <body ng-app="installment2">
 
     <div ng-controller="ctrl2">
-    <div class="container">
-    <div class="row" >
-        <div class="col-md-3 col-xs-6" ng-repeat="categ in body1.categs">
-    <h4>{{categ.type}}</h4>
-             <h2>{{body.categ.one.type}}</h2> 
-             <div class="row" ng-repeat="dur in body1.durs">
-                <div class="col-xs-6 input-group input-group-lg">
-                    <span class="input-group-addon" id="sizing-addon1">{{body1.durs[$index].monthes}} monthes </span>
-                 <input type="text" ng-model="categ.installmentDuration[$index]" class="form-control" placeholder="">               
+        <div class="container">
+            <div class="row" >
+                <div class="col-md-3 col-xs-6" ng-repeat="(key, value) in body1.categs">
+                1 {{key}} {{value.id}}
+                2 <h2>{{value.type}}</h2>
+                3    {{a.keys(value)}} 
+                    <div class="row" ng-repeat="dur in body1.durs">
+                        <div class="col-xs-6 input-group input-group-lg">
+                            <span class="input-group-addon"  id="sizing-addon1">{{dur.monthes}} monthes </span>
+                        <input type="text" ng-model="value.installmentDuration[$index]" class="form-control" placeholder="" >
+                        </div>
+                    </div> 
                 </div>
-            </div> 
-        </div>
 
-        <!-- <button class="btn btn-default dropdown-toggle" ng-click="print()" type="button" id="dropdownMenu1" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="true">
- -->
-            <div class="alert alert-warning" ng-show="showAlert">
-                <strong>تحزير!</strong> برجاء ادخال مبلغ اكبر من او يساوى 20% من المبلغ الاصلى.
-            </div>
-            </div>
+                <button class="btn btn-default" ng-click="print(value)" type="button">Save This Category </button>
+            
+        
+                <div class="alert alert-warning" ng-show="showAlert">
+                        <strong>تحزير!</strong> برجاء ادخال مبلغ اكبر من او يساوى 20% من المبلغ الاصلى.
+               </div>
+               </div>
+           </div>
+        </div>
     </div>
     
     <script>
-        angular.module('installment2', [])
+
+
+    
+angular.module('installment2', [])
             .controller('ctrl2', function ($scope) {
                 $scope.body1 = JSON.parse(<?php echo json_encode($resBody) ?>);
                 console.log($scope.body1);
+                /*
+                $scope.body1 = {"durs": [{"monthes": 6}, {"monthes": 12}, {"monthes":18},{"monthes":24}],"categs":{"one":{"id":1,"type":"air_caonditaner","installmentDuration":[0.15,0.390, 0.48,0.55]},"two": {"id":2,"type":"phones","installmentDuration":[0.15, 0.30, 0.48, 1.55]},"three":{"id":3,"type":"home","installmentDuration":[0.15, 0.30, 0.48, 3.55]}}};
+                console.log($scope.body1);*/
                 //////////////////////////////////////////////////////////////////////////////////////////////////
+                $scope.ngr = [];
                 $scope.print = () => {
-                    console.log($scope.categs)
-                }
+                    console.log($scope.body1);
+               <?php
+               /* post data to json file*/
+               $url = plugin_dir_url(__FILE__) . '/a.json';
+               $body = ?> JSON.decod (<?php echo json_encode($resBody) ?>
+                                $response = wp_remote_post( $url, array(
+                                    'method'      => 'POST',
+                                    'timeout'     => 45,
+                                    'redirection' => 5,
+                                    'httpversion' => '1.0',
+                                    'blocking'    => true,
+                                    'headers'     => array(),
+                                    'body'        => $body
+                                    array(
+                                        'username' => 'bob',
+                                        'password' => '1234xyz'
+                                    ),
+                                    'cookies'     => array()
+                                    )
+                                );
+                                
+                                if ( is_wp_error( $response ) ) {
+                                    $error_message = $response->get_error_message();
+                                    echo "Something went wrong: $error_message";
+                                } else {
+                                    echo 'Response:<pre>';
+                                    print_r( $response );
+                                    echo '</pre>';
+                                }
+            ?>
+
+                };
                   
+                 
+                  /* 
                 $scope.getper = (idx) => {
                     $scope.per = $scope.categs[0].installmentDuration[idx]
                     $scope.monthes = $scope.durs[idx].monthes
@@ -272,20 +313,24 @@ function wporg_options_page_html()
                         $scope.restAmount = amount - $scope.inAdvance
                         $scope.interest = $scope.restAmount * $scope.per
                         $scope.eachMonth = ($scope.restAmount + $scope.interest) / $scope.monthes
-                    } else {
-                        $scope.showAlert = true;
+                    } else { */
+                        //$scope.showAlert = true;
+                    /*  
                     }
                 }
+                    */
+                
 
             });
-    </script>installmentrate
+
+    </script>
 </body>
 
 
 <?php
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // output save settings button
-            submit_button('Save Settings');
+            /* submit_button('Save Settings'); */
             ?>
         </form>
     </div>

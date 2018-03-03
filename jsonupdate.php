@@ -2,8 +2,10 @@
 
 
 
+echo $res;
+/* 
 
-{
+$res = {
 	"durs": [{
 		"monthes": 6
 	}, {
@@ -31,11 +33,11 @@
 		}
 	}
 }
-
+ */
 
 
                /* post data to json file*/
-               $url = plugin_dir_url(__FILE__) . '/jsonupdate.php';
+            /*    $url = plugin_dir_url(__FILE__) . '/jsonupdate.php';
                $body = ?> JSON.decod (<?php echo json_encode($resBody) ?>
                                 $response = wp_remote_post( $url, array(
                                     'method'      => 'POST',
@@ -61,5 +63,5 @@
                                     print_r( $response );
                                     echo '</pre>';
                                 }
-            ?>
+             */
 ?>

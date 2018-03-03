@@ -243,7 +243,7 @@ function wporg_options_page_html()
                     </div> 
                 </div>
 
-                <button class="btn btn-default" ng-click="print(value)" type="button">Save This Category </button>
+                <button class="btn btn-default" ng-click="send()" type="button">Save This Category </button>
             
         
                 <div class="alert alert-warning" ng-show="showAlert">
@@ -259,9 +259,12 @@ function wporg_options_page_html()
 
     
 angular.module('installment2', [])
-            .controller('ctrl2', function ($scope) {
+            .controller('ctrl2', function ($scope , $http) {
                 $scope.body1 = JSON.parse(<?php echo json_encode($resBody) ?>);
                 console.log($scope.body1);
+                <?php
+                     plugin_dir_url(__FILE__) . "/jsonupdate.php"
+                     ?>
                 /*
                 $scope.body1 = {"durs": [{"monthes": 6}, {"monthes": 12}, {"monthes":18},{"monthes":24}],"categs":{"one":{"id":1,"type":"air_caonditaner","installmentDuration":[0.15,0.390, 0.48,0.55]},"two": {"id":2,"type":"phones","installmentDuration":[0.15, 0.30, 0.48, 1.55]},"three":{"id":3,"type":"home","installmentDuration":[0.15, 0.30, 0.48, 3.55]}}};
                 console.log($scope.body1);*/
@@ -270,9 +273,48 @@ angular.module('installment2', [])
                 $scope.print = () => {
                     console.log($scope.body1);
                
-
+                
                 };
-                  
+
+                $scope.send = function(){
+                    var req = {
+                    method: 'POST',
+                    url: '',
+                    headers: {
+                        'Content-Type': undefined
+                    },
+                    data: { test: 'test' }
+                    }
+                    
+                    $http(req)
+                    .then
+                    (function(){alert('Successfully posted '+ data)},
+                     function(){alert('Error while posting: ' + data)
+                    });
+                };
+
+
+
+
+
+
+
+/* = function(){
+   //Saving data into a single var -> JSON format
+   var userData = $scope.body1;
+
+
+
+$http.post('<?php// plugin_dir_url(__FILE__) . '/jsonupdate.php'?>', userData)
+.then(success(function() {
+        alert('Successfully posted '+ data);
+    }),error(function(data) {
+        alert('Error while posting: ' + data);
+    }));
+
+
+} */
+
                  
                   /* 
                 $scope.getper = (idx) => {

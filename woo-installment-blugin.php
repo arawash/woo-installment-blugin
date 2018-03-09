@@ -243,7 +243,7 @@ function wporg_options_page_html()
                     </div> 
                 </div>
 
-                <button class="btn btn-default" ng-click="send()" type="button">Save This Category </button>
+                <button class="btn btn-default" ng-click="print()" type="button">Save This Category </button>
             
         
                 <div class="alert alert-warning" ng-show="showAlert">
@@ -276,7 +276,7 @@ angular.module('installment2', [])
                 
                 };
 
-                $scope.send = function(){
+                $scope.senda = function(){
                     var req = {
                     method: 'POST',
                     url: '',

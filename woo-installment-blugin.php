@@ -265,18 +265,19 @@ angular.module('installment2', [])
                 <?php
                      plugin_dir_url(__FILE__) . "/jsonupdate.php"
                      ?>
-                /*
-                $scope.body1 = {"durs": [{"monthes": 6}, {"monthes": 12}, {"monthes":18},{"monthes":24}],"categs":{"one":{"id":1,"type":"air_caonditaner","installmentDuration":[0.15,0.390, 0.48,0.55]},"two": {"id":2,"type":"phones","installmentDuration":[0.15, 0.30, 0.48, 1.55]},"three":{"id":3,"type":"home","installmentDuration":[0.15, 0.30, 0.48, 3.55]}}};
-                console.log($scope.body1);*/
-                //////////////////////////////////////////////////////////////////////////////////////////////////
+                
                 $scope.ngr = [];
                 $scope.print = () => {
-                    console.log($scope.body1);
+                    console.log(JSON.stringify($scope.body1));
                
                 
                 };
+                $scope.data=() => {
+var ssdata = {}; 
 
-                $scope.senda = function(){
+                }
+
+                $scope.prints = function(){
                     var req = {
                     method: 'POST',
                     url: '',

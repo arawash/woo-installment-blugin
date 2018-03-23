@@ -1,0 +1,32 @@
+{
+    "durs": [{
+        "monthes": 6,
+        "$$hashKey": "object:6"
+    }, {
+        "monthes": 12,
+        "$$hashKey": "object:7"
+    }, {
+        "monthes": 18,
+        "$$hashKey": "object:8"
+    }, {
+        "monthes": 24,
+        "$$hashKey": "object:9"
+    }],
+    "categs": {
+        "one": {
+            "id": 1,
+            "type": "air_caonditaner",
+            "installmentDuration": [0.15, 0.39, 0.48, 0.55]
+        },
+        "two": {
+            "id": 2,
+            "type": "phones",
+            "installmentDuration": [0.15, 0.3, 0.48, 1.55]
+        },
+        "three": {
+            "id": 3,
+            "type": "home",
+            "installmentDuration": [0.15, 0.3, 0.48, 3.55]
+        }
+    }
+}
